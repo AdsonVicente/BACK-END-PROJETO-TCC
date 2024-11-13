@@ -3,7 +3,7 @@ import { PrismaRepository } from "../../../../shared/infra/database/prisma.repos
 import bcrypt from "bcrypt"
 import { LiturgiaMap } from "../mappers/liturgia.map";
 import { ILiturgiaRepository } from "../../../../modules/liturgia/domain/liturgia.repository.interface";
-
+import { startOfDay, endOfDay } from 'date-fns';
 
 class LiturgiaPrismaRepository extends PrismaRepository implements ILiturgiaRepository<Liturgia> {
 
@@ -23,7 +23,20 @@ class LiturgiaPrismaRepository extends PrismaRepository implements ILiturgiaRepo
     }
 
     async recuperarTodos(): Promise<Array<Liturgia>> {
-        const liturgiasRecuperadas = await this._datasource.liturgia.findMany();
+
+        const hoje = new Date();
+        const startOfDay = new Date(hoje.setHours(0, 0, 0, 0)); // Início do dia
+        const endOfDay = new Date(hoje.setHours(23, 59, 59, 999)); // Fim do dia
+        
+        const liturgiasRecuperadas = await this._datasource.liturgia.findMany({
+            where: {
+                dia: {
+                    gte: startOfDay, // Maior ou igual ao início do dia
+                    lt: endOfDay,    // Menor que o final do dia
+                },
+            },
+        });
+        
         const liturgias = liturgiasRecuperadas.map(
             (liturgia) => LiturgiaMap.fromPrismaModelToDomain(liturgia)
         );
