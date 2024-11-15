@@ -30,7 +30,7 @@ model Conteudo {
   banner       String? // O "?" indica que o campo é opcional e pode ser null
   publicadoEm  DateTime  @default(now())
   atualizadoEm DateTime  @updatedAt
-  categoria    String    @db.Uuid // Id da Categoria
+  categoria    String    @db.Uuid
   category     Categoria @relation(fields: [categoria], references: [id])
   viewCount    Int       @default(0)
 

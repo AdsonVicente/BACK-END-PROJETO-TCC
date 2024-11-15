@@ -4,8 +4,6 @@ import { PrismaRepository } from "../../../../shared/infra/database/prisma.repos
 import { ConteudoMap } from "../mappers/conteudo.map";
 import { Prisma } from "@prisma/client";
 
-
-
 class ConteudoPrismaRepository extends PrismaRepository implements IConteudoRepository<Conteudo> {
 
     async recuperarPorUuid(uuid: string): Promise<Conteudo | null> {
@@ -46,8 +44,8 @@ class ConteudoPrismaRepository extends PrismaRepository implements IConteudoRepo
 
     async existe(uuid: string): Promise<boolean> {
         const conteudoExistente = await this.recuperarPorUuid(uuid);
-		if (conteudoExistente)  {return true;}
-		return false;
+        if (conteudoExistente) { return true; }
+        return false;
     }
 
     async inserir(conteudo: Conteudo): Promise<Conteudo> {
@@ -60,7 +58,7 @@ class ConteudoPrismaRepository extends PrismaRepository implements IConteudoRepo
                     categoria: conteudo.categoria,
                     autor: conteudo.autor,
                     banner: conteudo.banner
-                    
+
                 }
             }
         );
@@ -70,7 +68,7 @@ class ConteudoPrismaRepository extends PrismaRepository implements IConteudoRepo
     async atualizar(uuid: string, conteudo: Conteudo): Promise<boolean> {
         const conteudoAtualizado = await this._datasource.conteudo.update(
             {
-                where: {id : uuid},
+                where: { id: uuid },
                 data: {
                     titulo: conteudo.titulo,
                     descricao: conteudo.descricao,
@@ -79,7 +77,7 @@ class ConteudoPrismaRepository extends PrismaRepository implements IConteudoRepo
                 }
             }
         );
-        if (conteudoAtualizado) {return true};
+        if (conteudoAtualizado) { return true };
         return false;
     }
 
@@ -88,12 +86,12 @@ class ConteudoPrismaRepository extends PrismaRepository implements IConteudoRepo
             {
                 where: {
                     id: uuid
-                }        
+                }
             }
         );
-        if (conteudoDeletado.id) {return true;}
+        if (conteudoDeletado.id) { return true; }
         return false;
     }
 }
 
-export {ConteudoPrismaRepository}
+export { ConteudoPrismaRepository }
