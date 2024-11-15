@@ -38,7 +38,7 @@ class ConteudoMap {
     }
 
     // Função para criar ou conectar categoria
-    public static async handleCategory(conteudo: any) {
+    public static handleCategory(conteudo: any) {
         if (conteudo.categoryId) {
             return { connect: { id: conteudo.categoryId } }; // Conectar categoria existente
         } else if (conteudo.categoria) {
