@@ -1,4 +1,3 @@
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -9,64 +8,62 @@ datasource db {
 }
 
 model Evento {
-  id String @id @db.Uuid
-  titulo String @db.VarChar(100)
-  descricao String @db.VarChar(500)
-  local String @db.VarChar(50)
-  data String @db.VarChar(15)
-  horario String @db.VarChar(8)
-  banner String? // O "?" indica que o campo é opcional e pode ser null
-  createdAt     DateTime       @default(now())
-  updatedAt     DateTime       @updatedAt
+  id         String      @id @db.Uuid
+  titulo     String      @db.VarChar(100)
+  descricao  String      @db.VarChar(500)
+  local      String      @db.VarChar(50)
+  data       String      @db.VarChar(15)
+  horario    String      @db.VarChar(8)
+  banner     String? // O "?" indica que o campo é opcional e pode ser null
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt
   inscricoes Inscricao[]
 
   @@map("eventos")
 }
 
 model Conteudo {
-  id String @id @db.Uuid
-  titulo String @db.VarChar(100)
-  descricao String @db.VarChar(500)
+  id           String    @id @db.Uuid
+  titulo       String    @db.VarChar(100)
+  descricao    String    @db.VarChar(500)
   autor        String
-  banner String? // O "?" indica que o campo é opcional e pode ser null
+  banner       String? // O "?" indica que o campo é opcional e pode ser null
   publicadoEm  DateTime  @default(now())
   atualizadoEm DateTime  @updatedAt
-  categoria String @db.Uuid
-  category    Categoria @relation(fields: [categoria], references: [id])
+  categoria    String    @db.Uuid // Id da Categoria
+  category     Categoria @relation(fields: [categoria], references: [id])
   viewCount    Int       @default(0)
 
   @@map("conteudos")
 }
 
 enum TipoAdmPrisma {
-    ADMGERAL
-    ADMEVENTOS
-    ADMCONTEUDOS
-    ADMLITURGIA
-    ADMEVENTOS_E_CONTEUDOS
-    ADMEVENTOS_CONTEUDOS_E_LITURGIA
-    ADMEVENTOS_E_LITURGIA
-    ADMCONTEUDOS_E_LITURGIA
+  ADMGERAL
+  ADMEVENTOS
+  ADMCONTEUDOS
+  ADMLITURGIA
+  ADMEVENTOS_E_CONTEUDOS
+  ADMEVENTOS_CONTEUDOS_E_LITURGIA
+  ADMEVENTOS_E_LITURGIA
+  ADMCONTEUDOS_E_LITURGIA
 }
 
-
 model Administrador {
-  isFirstLogin Boolean   @default(true)
-  id                String   @id @db.Uuid
-  nome              String   @db.VarChar(50)
-  email             String   @unique
-  senha             String
-  tipo              TipoAdmPrisma @map("tipo_adm")
-  isAdmin      Boolean   @default(false)
-  created_at   DateTime? @default(now())
-  update_at    DateTime? @default(now())
+  isFirstLogin Boolean       @default(true)
+  id           String        @id @db.Uuid
+  nome         String        @db.VarChar(50)
+  email        String        @unique
+  senha        String
+  tipo         TipoAdmPrisma @map("tipo_adm")
+  isAdmin      Boolean       @default(false)
+  created_at   DateTime?     @default(now())
+  update_at    DateTime?     @default(now())
 
   @@map("administradores")
 }
 
-
 model Liturgia {
-  id String @id @db.Uuid
+  id                String   @id @db.Uuid
   data              DateTime @default(now())
   titulo            String
   corLiturgica      String
@@ -80,7 +77,7 @@ model Liturgia {
 }
 
 model Categoria {
-  id                String   @id @db.Uuid
+  id        String     @id @db.Uuid
   nome      String
   data      DateTime   @default(now())
   createdAt DateTime   @default(now())
@@ -91,17 +88,16 @@ model Categoria {
 }
 
 model Inscricao {
-  id                String   @id @db.Uuid
+  id        String   @id @db.Uuid
   nome      String
   telefone  String
   idade     Int
   email     String
   grupo     String
-  setor    String
+  setor     String
   createdAt DateTime @default(now())
-  eventId String @db.Uuid
-  evento Evento @relation(fields: [eventId], references: [id])
+  eventId   String   @db.Uuid
+  evento    Evento   @relation(fields: [eventId], references: [id])
 
   @@map("Inscricoes")
 }
-
