@@ -1,52 +1,43 @@
-import { Prisma } from "@prisma/client";
+import { Prisma } from "@prisma/client"; 
 import { Conteudo } from "../../domain/conteudo.entity";
 import { IConteudo, RecuperarConteudoProps } from "../../domain/conteudo.types";
 
 class ConteudoMap {
+
+    // Mapeia o Conteúdo do domínio para DTO (Data Transfer Object)
     public static toDTO(conteudo: Conteudo): IConteudo {
         return {
             id: conteudo.id,
             titulo: conteudo.titulo,
             descricao: conteudo.descricao,
-            categoria: conteudo.categoria,  // Aqui, 'categoria' precisa ser um objeto correto
+            categoria: conteudo.categoria, // Aqui já é esperado que categoria seja um objeto ou um campo simples
             autor: conteudo.autor,
             banner: conteudo.banner,
-            publicadoEm: conteudo.publicadoEm,
-        };
+            publicadoEm: conteudo.publicadoEm
+        }
     }
 
+    // Mapeia o Conteúdo do DTO (Data Transfer Object) para o Domínio
     public static toDomain(conteudo: RecuperarConteudoProps): Conteudo {
         return Conteudo.recuperar(conteudo);
     }
 
-    public static fromPrismaModelToDomain(
-        conteudo: Prisma.ConteudoCreateInput & { category?: { nome: string } }
-    ): Conteudo {
+    // Converte o modelo do Prisma para o domínio, tratando a categoria como um objeto
+    public static fromPrismaModelToDomain(conteudo: Prisma.ConteudoCreateInput & { category?: { nome: string } }): Conteudo {
         return ConteudoMap.toDomain({
             id: conteudo.id,
             titulo: conteudo.titulo,
             descricao: conteudo.descricao,
-            categoria: conteudo.category
-                ? { nome: conteudo.category.nome }
-                : { nome: "Sem Categoria" },  // Garantir que sempre tenha um nome
+            categoria: conteudo.category 
+                ? { nome: conteudo.category.nome }  // Se category existir, passa o nome
+                : null, // Se não existir, passamos null para indicar que a categoria não foi definida
             autor: conteudo.autor,
             banner: conteudo.banner,
-            publicadoEm: conteudo.publicadoEm
-                ? new Date(conteudo.publicadoEm)
-                : new Date(),  // Usar data atual caso esteja faltando
+            publicadoEm: conteudo.publicadoEm as Date
         });
     }
 
-    // Função para criar ou conectar categoria
-    public static handleCategory(conteudo: any) {
-        if (conteudo.categoryId) {
-            return { connect: { id: conteudo.categoryId } }; // Conectar categoria existente
-        } else if (conteudo.categoria) {
-            return { create: { nome: conteudo.categoria } }; // Criar nova categoria
-        } else {
-            return null;  // Ou trate conforme necessário
-        }
-    }
 }
 
 export { ConteudoMap };
+    
