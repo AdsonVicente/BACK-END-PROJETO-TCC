@@ -7,12 +7,6 @@ import { Conteudo } from "../../../../modules/conteudo/domain/conteudo.entity";
 import { ConteudoMap } from "../mappers/conteudo.map";
 import { Categoria } from "../../../../modules/categoria/domain/categoria.entity";
 
-
-
-
-
-
-
 const prismaMock: DeepMockProxy<PrismaClient> = mockDeep<PrismaClient>();
 let conteudoRepositorio: ConteudoPrismaRepository;
 let UUIDValido: string;
@@ -22,14 +16,14 @@ let descricaoEventoValida: string;
 
 describe('Repositório Prisma: Conteudo', () => {
 
-	beforeAll(async () => {
+    beforeAll(async () => {
 
         conteudoRepositorio = new ConteudoPrismaRepository(prismaMock);
 
         //Preencendo as variáveis com dados em conformidade com as restrições da regra de negócio
         UUIDValido = faker.string.uuid(); // Retorna um UUID v4
-        tituloEventoValido = faker.string.alpha({length:{min:Conteudo.TAMANHO_MINIMO_TITULO,max:Conteudo.TAMANHO_MAXIMO_TITULO}});
-        descricaoEventoValida = faker.string.alpha({length:{min:Conteudo.TAMANHO_MINIMO_DESCRICAO,max:Conteudo.TAMANHO_MAXIMO_DESCRICAO}});
+        tituloEventoValido = faker.string.alpha({ length: { min: Conteudo.TAMANHO_MINIMO_TITULO, max: Conteudo.TAMANHO_MAXIMO_TITULO } });
+        descricaoEventoValida = faker.string.alpha({ length: { min: Conteudo.TAMANHO_MINIMO_DESCRICAO, max: Conteudo.TAMANHO_MAXIMO_DESCRICAO } });
     });
 
     afterEach(() => {
@@ -69,7 +63,7 @@ describe('Repositório Prisma: Conteudo', () => {
 
             prismaMock.conteudo.findMany.mockResolvedValue(listaConteudosPrisma);
 
-            const conteudos:Array<Conteudo> = listaConteudosPrisma.map(
+            const conteudos: Array<Conteudo> = listaConteudosPrisma.map(
                 (conteudo) => ConteudoMap.fromPrismaModelToDomain(conteudo)
             );
 
@@ -79,7 +73,7 @@ describe('Repositório Prisma: Conteudo', () => {
             expect(prismaMock.conteudo.findMany).toHaveBeenCalledTimes(1);
 
 
-		});
+        });
 
     });
 
@@ -93,8 +87,8 @@ describe('Repositório Prisma: Conteudo', () => {
                 titulo: tituloEventoValido,
                 descricao: descricaoEventoValida,
                 categoria: "categoria teste",
-                autor:"Deivid Pontes",
-                banner:"https://aajajajjaja.com",
+                autor: "Deivid Pontes",
+                banner: "https://aajajajjaja.com",
                 publicadoEm: new Date(), // Adicione a data de publicação
                 atualizadoEm: new Date(), // Adicione a data de atualização
                 viewCount: 0 // Adicione a contagem de visualizações
@@ -108,14 +102,14 @@ describe('Repositório Prisma: Conteudo', () => {
 
             expect(conteudoInserido).toStrictEqual(conteudo)
             expect(prismaMock.conteudo.create).toHaveBeenCalledTimes(1);
-            expect(prismaMock.conteudo.create).toBeCalledWith(  {
+            expect(prismaMock.conteudo.create).toBeCalledWith({
                 data: {
-                id: UUIDValido,
-                titulo: tituloEventoValido,
-                descricao: descricaoEventoValida,
-                categoria: "categoria teste"
-                }    
-            });  
+                    id: UUIDValido,
+                    titulo: tituloEventoValido,
+                    descricao: descricaoEventoValida,
+                    categoria: "categoria teste"
+                }
+            });
 
 
         });
@@ -131,8 +125,8 @@ describe('Repositório Prisma: Conteudo', () => {
                 titulo: tituloEventoValido,
                 descricao: descricaoEventoValida,
                 categoria: "categoria teste",
-                autor:"Deivid Pontes",
-                banner:"https://aajajajjaja.com",
+                autor: "Deivid Pontes",
+                banner: "https://aajajajjaja.com",
                 publicadoEm: new Date(), // Adicione a data de publicação
                 atualizadoEm: new Date(), // Adicione a data de atualização
                 viewCount: 0 // Adicione a contagem de visualizações
@@ -142,23 +136,23 @@ describe('Repositório Prisma: Conteudo', () => {
 
             const conteudo: Conteudo = ConteudoMap.toDomain(conteudoPrisma);
 
-            const conteudoAtualizado = await conteudoRepositorio.atualizar(conteudo.id,conteudo);
+            const conteudoAtualizado = await conteudoRepositorio.atualizar(conteudo.id, conteudo);
 
             expect(conteudoAtualizado).toBeTruthy()
             expect(prismaMock.conteudo.update).toHaveBeenCalledTimes(1);
             expect(prismaMock.conteudo.update).toBeCalledWith({
-                where: {id : conteudo.id},
+                where: { id: conteudo.id },
                 data: {
-                titulo: tituloEventoValido,
-                descricao: descricaoEventoValida,
-                categoria: "categoria teste",
-                autor: "Deivid Pontes", // Adicione as propriedades necessárias
-                banner: "https://aajajajjaja.com", // Adicione as propriedades necessárias
-                publicadoEm: conteudoPrisma.publicadoEm, // Mantenha a propriedade
-                atualizadoEm: new Date(), // Atualize com a data atual
-                viewCount: conteudoPrisma.viewCount // Mantenha a contagem de visualizações
+                    titulo: tituloEventoValido,
+                    descricao: descricaoEventoValida,
+                    categoria: "categoria teste",
+                    autor: "Deivid Pontes", // Adicione as propriedades necessárias
+                    banner: "https://aajajajjaja.com", // Adicione as propriedades necessárias
+                    publicadoEm: conteudoPrisma.publicadoEm, // Mantenha a propriedade
+                    atualizadoEm: new Date(), // Atualize com a data atual
+                    viewCount: conteudoPrisma.viewCount // Mantenha a contagem de visualizações
                 }
-            });  
+            });
 
 
         });
@@ -174,8 +168,8 @@ describe('Repositório Prisma: Conteudo', () => {
                 titulo: tituloEventoValido,
                 descricao: descricaoEventoValida,
                 categoria: "categoria teste",
-                autor:"Deivid Pontes",
-                banner:"https://aajajajjaja.com",
+                autor: "Deivid Pontes",
+                banner: "https://aajajajjaja.com",
                 publicadoEm: new Date(), // Adicione a data de publicação
                 atualizadoEm: new Date(), // Adicione a data de atualização
                 viewCount: 0 // Adicione a contagem de visualizações
@@ -190,8 +184,8 @@ describe('Repositório Prisma: Conteudo', () => {
             expect(conteudoDeletado).toBeTruthy();
             expect(prismaMock.conteudo.delete).toHaveBeenCalledTimes(1);
             expect(prismaMock.conteudo.delete).toBeCalledWith({
-                where: {id : conteudo.id}
-            });  
+                where: { id: conteudo.id }
+            });
 
 
         });

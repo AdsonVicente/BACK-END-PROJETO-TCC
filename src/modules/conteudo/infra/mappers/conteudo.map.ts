@@ -20,12 +20,12 @@ class ConteudoMap {
         return Conteudo.recuperar(conteudo);
     }
 
-    public static fromPrismaModelToDomain(conteudo: Prisma.ConteudoCreateInput): Conteudo {
+    public static fromPrismaModelToDomain(conteudo: Prisma.ConteudoCreateInput & { category?: { nome: string } }): Conteudo {
         return ConteudoMap.toDomain({
             id: conteudo.id,
             titulo: conteudo.titulo,
             descricao: conteudo.descricao,
-            categoria: conteudo.category?.connect?.id || "", // Acesso com segurança, ou use outra abordagem se necessário
+            categoria: conteudo.category ? { nome: conteudo.category.nome } : { nome: "" }, // Retorna o nome da categoria se existir, senão retorna um objeto vazio
             autor: conteudo.autor,
             banner: conteudo.banner,
             publicadoEm: conteudo.publicadoEm as Date

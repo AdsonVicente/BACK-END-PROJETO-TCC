@@ -5,7 +5,7 @@ interface IConteudo {
     id?: string;
     titulo: string;
     descricao: string;
-    categoria: string;
+    categoria: any;
     autor: string;
     banner: string | null | undefined;
     publicadoEm?: Date;

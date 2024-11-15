@@ -4,10 +4,10 @@ import { IConteudo } from "../../../../../modules/conteudo/domain/conteudo.types
 import { ConteudoMap } from "../../../../../modules/conteudo/infra/mappers/conteudo.map";
 import { IUseCase } from "../../../../../shared/application/use-case.interface";
 
-class RecuperarTodosConteudosUseCase implements IUseCase<void,Array<IConteudo>> {
+class RecuperarTodosConteudosUseCase implements IUseCase<void, Array<IConteudo>> {
     private _conteudoRepositorio: IConteudoRepository<Conteudo>;
 
-    constructor(repositorio: IConteudoRepository<Conteudo>){
+    constructor(repositorio: IConteudoRepository<Conteudo>) {
         this._conteudoRepositorio = repositorio;
     }
 
